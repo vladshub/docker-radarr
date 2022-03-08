@@ -4,7 +4,7 @@ ARG TIMEZONE="Asia/Jerusalem"
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=$TIMEZONE
 RUN mkdir -p /var/lib/radarr && \
-    apt update && apt install wget -yyq
+    apt update && apt install wget sqlite3 -yyq
 # x64    arm     arm64
 # amd64  arm/v7  arm64
 RUN case $TARGETARCH in \
