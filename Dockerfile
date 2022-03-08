@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/runtime:6.0-alpine
+FROM mcr.microsoft.com/dotnet/runtime:6.0-focal
 ARG TARGETARCH
 ARG TIMEZONE="Asia/Jerusalem"
 ENV DEBIAN_FRONTEND=noninteractive
