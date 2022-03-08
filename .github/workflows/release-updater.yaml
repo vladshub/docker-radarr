@@ -9,8 +9,19 @@ on:
 
 
 jobs:
+  get-latest-version:
+    name: Get Latest Version
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.version.outputs.tag}}
+    steps:
+      - name: Get latest version
+        id: version
+        run: echo "::set-output name=tag::$(curl https://radarr.servarr.com/v1/update/master/changes?os=linux&runtime=netcore&arch=x64 | jq '.[0].version')"
+
   tag:
     name: Tag
+    needs: get-latest-version
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -26,10 +37,6 @@ jobs:
       - name: Checkout branch "master"
         uses: actions/checkout@v2
 
-      - name: Get latest version
-        id: version
-        run: echo "::set-output name=tag::$(curl https://radarr.servarr.com/v1/update/master/changes?os=linux&runtime=netcore&arch=x64 | jq '.[0].version')"
-
       - name: Create tag
         uses: actions/github-script@v5
         with:
@@ -37,6 +44,6 @@ jobs:
             github.rest.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: 'refs/tags/${{ steps.date.version.tag }}',
+              ref: 'refs/tags/${{ needs.get-latest-version.outputs.tag }}',
               sha: context.sha
             })
