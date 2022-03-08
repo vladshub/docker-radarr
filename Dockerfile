@@ -15,7 +15,7 @@ RUN case $TARGETARCH in \
 esac;
 
 RUN export ARCH=$(cat arch); \
-    wget -O Radarr.tar.gz "http://radarr.servarr.com/v1/update/master/updatefile?os=linux&runtime=netcore&arch=${ARCH}"; \
+    wget -O Radarr.tar.gz "http://radarr.servarr.com/v1/update/master/changes?os=linux&runtime=netcore&arch=${ARCH}"; \
     tar xzvf Radarr.tar.gz -C /opt; \
     rm -f Radarr.tar.gz arch; \
     test -f /opt/Radarr/Radarr && echo "installed successfully" || exit 1
