@@ -3,7 +3,8 @@ ARG TARGETARCH
 ARG TIMEZONE="Asia/Jerusalem"
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=$TIMEZONE
-RUN mkdir -p /var/lib/radarr
+RUN mkdir -p /var/lib/radarr && \
+    apt update && apt instapp wget -yyq
 # x64    arm     arm64
 # amd64  arm/v7  arm64
 RUN case $TARGETARCH in \
