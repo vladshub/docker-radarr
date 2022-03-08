@@ -8,7 +8,7 @@ ARG BUILDOS
 ARG BUILDARCH
 ARG BUILDVARIANT
 RUN echo "I'm building for TARGETPLATFORM=$TARGETPLATFORM TARGETOS=$TARGETOS TARGETARCH=$TARGETARCH TARGETVARIANT=$TARGETVARIANT BUILDPLATFORM=$BUILDPLATFORM BUILDOS=$BUILDOS BUILDARCH=$BUILDARCH BUILDVARIANT=$BUILDVARIANT"
-RUN apt update; apt install wget apt-transport-https sqlite3 -yyq
+RUN apt update; apt install wget apt-transport-https sqlite3 ca-certificates -yyq
 RUN wget https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb; dpkg -i packages-microsoft-prod.deb; rm packages-microsoft-prod.deb; 
 RUN apt update; apt-get install -y aspnetcore-runtime-6.0
 # x64    arm     arm64
