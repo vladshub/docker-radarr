@@ -14,8 +14,8 @@ RUN apt update; apt-get install -y aspnetcore-runtime-6.0
 # x64    arm     arm64
 # amd64  arm/v7  arm64
 RUN case $TARGETARCH in \
-    amd64*) echo "x64" > /arch;;\
-    arm/*) echo "arm" > /arch;;\
+    amd64) echo "x64" > /arch;;\
+    arm) echo "arm" > /arch;;\
     arm64) echo "arm64" > /arch;;\
     *) echo "Failed to TARGETARCH=$TARGETARCH is not compatible with Radarr" && exit 2;;\
 esac;
