@@ -1,0 +1,30 @@
+name: Release Updated
+
+on:
+  schedule:
+  - cron: "0 * * * *"
+  push:
+    branches: [ main ]
+
+jobs:
+  tag:
+    name: Tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get latest version
+        id: version
+        run: echo "::set-output name=tag::$(curl https://radarr.servarr.com/v1/update/master/changes?os=linux&runtime=netcore&arch=x64 | jq '.[0].version')"
+      - name: Checkout branch "master"
+        uses: actions/checkout@v2
+        with:
+          ref: 'master'
+      - name: Create tag
+        uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/${{ steps.date.version.tag }}',
+              sha: context.sha
+            })
