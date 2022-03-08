@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/runtime-deps:6.0-alpine
+FROM mcr.microsoft.com/dotnet/runtime:6.0-alpine
 ARG TARGETARCH
 ARG TIMEZONE="Asia/Jerusalem"
 ENV DEBIAN_FRONTEND=noninteractive
@@ -13,10 +13,13 @@ RUN case $TARGETARCH in \
     *) echo "Failed to TARGETARCH=$TARGETARCH is not compatible with Radarr" && exit 2;;\
 esac;
 
-RUN export ARCH=$(cat arch); wget -O Radarr.tar.gz "http://radarr.servarr.com/v1/update/master/updatefile?os=linux&runtime=netcore&arch=${ARCH}"
-RUN tar xzvf Radarr.tar.gz -C /opt; rm -f Radarr.tar.gz arch; test -f /opt/Radarr/Radarr && echo "installed successfully" || exit 1
+RUN export ARCH=$(cat arch); \
+    wget -O Radarr.tar.gz "http://radarr.servarr.com/v1/update/master/updatefile?os=linux&runtime=netcore&arch=${ARCH}"; \
+    tar xzvf Radarr.tar.gz -C /opt; \
+    rm -f Radarr.tar.gz arch; \
+    test -f /opt/Radarr/Radarr && echo "installed successfully" || exit 1
 WORKDIR /opt/Radarr
-CMD ./Radarr -nobrowser -data=/var/lib/radarr/
+CMD /opt/Radarr/Radarr -nobrowser -data=/var/lib/radarr/
 
 VOLUME [ "/var/lib/radarr" ]
 EXPOSE 7878
