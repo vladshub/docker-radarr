@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0-alpine
 ARG TIMEZONE="Asia/Jerusalem"
 ARG TARGETPLATFORM
 ARG TARGETOS
@@ -9,12 +9,12 @@ ARG BUILDOS
 ARG BUILDARCH
 ARG BUILDVARIANT
 ENV DEBIAN_FRONTEND=noninteractive
-ENV TZ=$TIMEZONE
+# ENV TZ=$TIMEZONE
 RUN echo "I'm building for TARGETPLATFORM=$TARGETPLATFORM TARGETOS=$TARGETOS TARGETARCH=$TARGETARCH TARGETVARIANT=$TARGETVARIANT BUILDPLATFORM=$BUILDPLATFORM BUILDOS=$BUILDOS BUILDARCH=$BUILDARCH BUILDVARIANT=$BUILDVARIANT"
-RUN ln -fs "/usr/share/zoneinfo/${TZ}" /etc/localtime
-RUN apt update; apt install wget libterm-readline-gnu-perl apt-transport-https sqlite3 ca-certificates tzdata -yyq
-RUN wget https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb; dpkg -i packages-microsoft-prod.deb; rm packages-microsoft-prod.deb; 
-RUN apt update; apt install -y aspnetcore-runtime-6.0
+# RUN ln -fs "/usr/share/zoneinfo/${TZ}" /etc/localtime
+# RUN apt update; apt install wget libterm-readline-gnu-perl apt-transport-https sqlite3 ca-certificates tzdata -yyq
+# RUN wget https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb; dpkg -i packages-microsoft-prod.deb; rm packages-microsoft-prod.deb; 
+# RUN apt update; apt install -y aspnetcore-runtime-6.0
 # x64    arm     arm64
 # amd64  arm/v7  arm64
 RUN case $TARGETARCH in \
@@ -33,3 +33,4 @@ WORKDIR /opt/Radarr
 CMD ./Radarr -nobrowser -data=/var/lib/radarr/
 
 EXPOSE 7878
+# 6.0.2-alpine3
