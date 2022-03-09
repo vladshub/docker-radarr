@@ -41,9 +41,18 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'refs/tags/${{ needs.get-latest-version.outputs.tag }}',
-              sha: context.sha
-            })
+            try {
+              const result = await github.rest.git.getRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: 'refs/tags/${{ needs.get-latest-version.outputs.tag }}'
+              });
+              console.log(result);
+            } catch (error) {
+              github.rest.git.createRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: 'refs/tags/${{ needs.get-latest-version.outputs.tag }}',
+                sha: context.sha
+              });
+            }
