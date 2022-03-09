@@ -41,19 +41,20 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            const result = github.rest.git.getRef({
+            const result = await github.rest.git.getRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: 'refs/tags/${{ needs.get-latest-version.outputs.tag }}'
+              ref: 'tags/${{ needs.get-latest-version.outputs.tag }}'
             });
-            console.log(result);
 
-            # try {
-            # } catch (error) {
-              # github.rest.git.createRef({
-              #   owner: context.repo.owner,
-              #   repo: context.repo.repo,
-              #   ref: 'refs/tags/${{ needs.get-latest-version.outputs.tag }}',
-              #   sha: context.sha
-              # });
-            # }
+            if (result.status == 404) {
+              console.log("creating tag: ${{ needs.get-latest-version.outputs.tag }}");
+              github.rest.git.createRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: 'refs/tags/${{ needs.get-latest-version.outputs.tag }}',
+                sha: context.sha
+              });
+            } else {
+              console.log("tag: ${{ needs.get-latest-version.outputs.tag }} already exists");
+            }
