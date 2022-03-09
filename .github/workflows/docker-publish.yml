@@ -39,7 +39,7 @@ jobs:
           then
             echo "::set-output name=tag::$(get_latest_release "Radarr/Radarr")"
           else
-            echo "::set-output name=tag::${GITHUB_REF##*/}"
+            echo "::set-output name=tag::${GITHUB_REF##*/v}"
           fi
 
   build:

@@ -51,9 +51,9 @@ jobs:
                 repo: context.repo.repo,
                 ref: 'tags/v${{ needs.get-latest-version.outputs.tag }}'
               });
-              console.log("tag: ${{ needs.get-latest-version.outputs.tag }} already exists");
+              console.log("tag: v${{ needs.get-latest-version.outputs.tag }} already exists");
             } catch(error) {
-              console.log("creating tag: ${{ needs.get-latest-version.outputs.tag }}");
+              console.log("creating tag: v${{ needs.get-latest-version.outputs.tag }}");
               github.rest.git.createRef({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
