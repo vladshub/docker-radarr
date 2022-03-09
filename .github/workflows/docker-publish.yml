@@ -23,9 +23,29 @@ env:
 
 
 jobs:
+  get-current-version:
+    name: Get Latest Version
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.version.outputs.tag}}
+    steps:
+      - name: Get latest version
+        id: version
+        run: |
+          get_latest_release() {
+            curl --silent "https://api.github.com/repos/$1/releases/latest" | jq -r ".name"
+          }
+          if [ "${GITHUB_REF##*/}" == "main" ];
+          then
+            echo "::set-output name=tag::$(get_latest_release "Radarr/Radarr")"
+          else
+            echo "::set-output name=tag::${GITHUB_REF##*/}"
+          fi
+
   build:
 
     runs-on: ubuntu-latest
+    needs: get-current-version
     permissions:
       contents: read
       packages: write
@@ -90,6 +110,8 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            VERSION=${{ needs.get-current-version.outputs.tag }}
 
       # Sign the resulting Docker image digest except on PRs.
       # This will only write to the public Rekor transparency log when the Docker

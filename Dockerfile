@@ -1,6 +1,7 @@
 FROM mcr.microsoft.com/dotnet/runtime:6.0-focal
 ARG TARGETARCH
 ARG TIMEZONE="Asia/Jerusalem"
+ARG VERSION=4.0.5.5981
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=$TIMEZONE
 RUN mkdir -p /var/lib/radarr && \
@@ -15,7 +16,7 @@ RUN case $TARGETARCH in \
 esac;
 
 RUN export ARCH=$(cat arch); \
-    wget -O Radarr.tar.gz "http://radarr.servarr.com/v1/update/master/changes?os=linux&runtime=netcore&arch=${ARCH}"; \
+    wget -O Radarr.tar.gz "https://github.com/Radarr/Radarr/releases/download/v${VERSION}/Radarr.master.${VERSION}.linux-core-${ARCH}.tar.gz"; \
     tar xzvf Radarr.tar.gz -C /opt; \
     rm -f Radarr.tar.gz arch; \
     test -f /opt/Radarr/Radarr && echo "installed successfully" || exit 1
