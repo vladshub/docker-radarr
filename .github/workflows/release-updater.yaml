@@ -44,7 +44,7 @@ jobs:
             const result = await github.rest.git.getRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: 'tags/${{ needs.get-latest-version.outputs.tag }}'
+              ref: 'tags/v${{ needs.get-latest-version.outputs.tag }}'
             });
 
             if (result.status == 404) {
@@ -52,7 +52,7 @@ jobs:
               github.rest.git.createRef({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                ref: 'refs/tags/${{ needs.get-latest-version.outputs.tag }}',
+                ref: 'refs/tags/v${{ needs.get-latest-version.outputs.tag }}',
                 sha: context.sha
               });
             } else {
